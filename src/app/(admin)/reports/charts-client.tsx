@@ -35,7 +35,7 @@ export function ChartsClient({ revenueData, clientsData }: { revenueData: any[],
                 <Tooltip 
                   cursor={{fill: 'transparent'}}
                   contentStyle={{ borderRadius: '8px', border: '1px solid var(--border)', backgroundColor: 'var(--background)' }}
-                  formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Receita']}
+                  formatter={(value: any) => [`R$ ${Number(value).toFixed(2)}`, 'Receita']}
                 />
                 <Bar dataKey="total" fill="#3b82f6" radius={[4, 4, 0, 0]} />
               </BarChart>
