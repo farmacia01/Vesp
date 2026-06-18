@@ -33,7 +33,7 @@ export async function improvePromoTextAction(text: string, clientName?: string) 
 
   try {
     const { text: improved } = await generateText({
-      model: openai('gpt-4o-mini'),
+      model: openai('gpt-4o-mini') as any,
       system: `Você é um especialista em copywriting para WhatsApp de agências de marketing.
 Reescreva a promoção recebida deixando o texto mais persuasivo, natural e adequado para WhatsApp.
 Use emojis estrategicamente (2-4 no máximo), linguagem direta e crie urgência quando aplicável.

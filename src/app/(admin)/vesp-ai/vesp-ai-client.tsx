@@ -11,7 +11,7 @@ export function VespAiClient({ clients }: { clients: any[] }) {
   const [selectedClient, setSelectedClient] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = (useChat as any)({
     api: '/api/chat',
     body: {
       data: {
@@ -70,7 +70,7 @@ export function VespAiClient({ clients }: { clients: any[] }) {
             </p>
           </div>
         ) : (
-          messages.map(m => (
+          messages.map((m: any) => (
             <div key={m.id} className={`flex gap-3 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {m.role === 'assistant' && (
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">

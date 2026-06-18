@@ -26,7 +26,7 @@ export async function generateImagePromptAction(clientId: string, scenario: stri
 
   try {
     const { text } = await generateText({
-      model: openai('gpt-4o-mini'),
+      model: openai('gpt-4o-mini') as any,
       system: `Você é um Diretor de Arte e Copywriter especialista no mercado digital brasileiro.
 O usuário fornecerá um CENÁRIO que ele deseja promover e o CONTEXTO DA MARCA do cliente.
 Sua missão é gerar uma proposta completa para um Flyer Promocional com estilo 3D moderno.
