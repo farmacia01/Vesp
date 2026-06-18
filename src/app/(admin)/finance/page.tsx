@@ -1,11 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { DollarSign, TrendingUp, AlertCircle, CreditCard } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { FinanceClient } from './finance-client';
 
 export default async function FinancePage({
   searchParams,
@@ -89,60 +85,7 @@ export default async function FinancePage({
         />
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <CardTitle>Histórico de Pagamentos</CardTitle>
-          <div className="flex flex-wrap gap-2">
-            <a href="/finance" className={`text-sm px-3 py-1 rounded-full ${!filterStatus ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>Todos</a>
-            <a href="/finance?status=paid" className={`text-sm px-3 py-1 rounded-full ${filterStatus === 'paid' ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'}`}>Pagos</a>
-            <a href="/finance?status=pending" className={`text-sm px-3 py-1 rounded-full ${filterStatus === 'pending' ? 'bg-warning text-warning-foreground' : 'bg-muted text-muted-foreground'}`}>Pendentes</a>
-            <a href="/finance?status=overdue" className={`text-sm px-3 py-1 rounded-full ${filterStatus === 'overdue' ? 'bg-destructive text-destructive-foreground' : 'bg-muted text-muted-foreground'}`}>Atrasados</a>
-          </div>
-        </CardHeader>
-        <CardContent className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Valor</TableHead>
-                <TableHead className="hidden sm:table-cell">Vencimento</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right hidden md:table-cell">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {invoices && invoices.length > 0 ? (
-                invoices.map((invoice: any) => (
-                  <TableRow key={invoice.id}>
-                    <TableCell className="font-medium">{invoice.clients?.name}</TableCell>
-                    <TableCell>
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(invoice.amount)}
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      {format(new Date(invoice.due_date), 'dd/MM/yyyy', { locale: ptBR })}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={getStatusColor(invoice.status) as any}>
-                        {getStatusLabel(invoice.status)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right hidden md:table-cell">
-                      {/* Actions like register payment, send reminder */}
-                      <button className="text-sm text-primary hover:underline">Detalhes</button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={5} className="h-24 text-center">
-                    Nenhuma fatura encontrada.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <FinanceClient invoices={invoices as any} filterStatus={filterStatus} />
     </div>
   );
 }

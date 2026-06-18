@@ -12,7 +12,7 @@ export function Logo({
       <img 
         src="/logo.svg" 
         alt="Logo" 
-        className="h-10 w-auto object-contain"
+        className="h-24 w-auto object-contain"
       />
     </div>
   );

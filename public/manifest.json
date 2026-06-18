@@ -1,6 +1,6 @@
 {
-  "name": "Vesp — Gerenciamento para Social Media",
-  "short_name": "Vesp",
+  "name": "EvoSm — Social Media OS",
+  "short_name": "EvoSm",
   "description": "Gerenciamento inteligente para Social Media e Agências.",
   "start_url": "/dashboard",
   "display": "standalone",

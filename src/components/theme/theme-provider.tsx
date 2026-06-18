@@ -36,31 +36,26 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('dark');
+  // Server renders with `dark` class on <html>; useEffect syncs localStorage.
+  const [theme, setThemeState] = useState<Theme>('light');
 
-  // Sync from what the inline script already applied (avoids hydration flash).
   useEffect(() => {
-    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? null;
-    const initial: Theme = stored ?? 'dark';
-    setThemeState(initial);
-    applyTheme(initial);
+    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? 'light';
+    setThemeState(stored);
+    applyTheme(stored);
   }, []);
 
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
     applyTheme(t);
-    try {
-      localStorage.setItem(STORAGE_KEY, t);
-    } catch {}
+    try { localStorage.setItem(STORAGE_KEY, t); } catch {}
   }, []);
 
   const toggleTheme = useCallback(() => {
     setThemeState((prev) => {
       const next: Theme = prev === 'dark' ? 'light' : 'dark';
       applyTheme(next);
-      try {
-        localStorage.setItem(STORAGE_KEY, next);
-      } catch {}
+      try { localStorage.setItem(STORAGE_KEY, next); } catch {}
       return next;
     });
   }, []);
@@ -71,21 +66,3 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     </ThemeContext>
   );
 }
-
-/** Inline script string — runs before paint to prevent theme flash (FOUC). */
-export const themeInitScript = `
-(function() {
-  try {
-    var t = localStorage.getItem('${STORAGE_KEY}') || 'dark';
-    if (t !== 'light') {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
-    } else {
-      document.documentElement.style.colorScheme = 'light';
-    }
-  } catch (e) {
-    document.documentElement.classList.add('dark');
-    document.documentElement.style.colorScheme = 'dark';
-  }
-})();
-`;

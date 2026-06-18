@@ -32,23 +32,37 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
-  // Skip non-GET and chrome-extension requests
+  // Skip non-GET requests
   if (request.method !== 'GET') return;
+
+  // Skip chrome-extension, webpack HMR, and Next.js internal requests in dev
   if (request.url.startsWith('chrome-extension://')) return;
+  if (request.url.includes('/_next/webpack')) return;
+  if (request.url.includes('/__nextjs')) return;
+  if (request.url.includes('/_next/data')) return;
+
+  // Skip RSC (React Server Components) flight requests
+  const url = new URL(request.url);
+  if (url.searchParams.has('_rsc')) return;
+  if (request.headers.get('RSC') === '1') return;
+  if (request.headers.get('Next-Router-State-Tree')) return;
 
   // Navigation requests (HTML pages) — Network First
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Cache successful responses
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          // Only cache successful responses
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          }
           return response;
         })
         .catch(() =>
           caches.match(request).then((cached) => cached || caches.match('/offline.html'))
         )
+        .then((response) => response || new Response('Offline', { status: 503, statusText: 'Service Unavailable' }))
     );
     return;
   }
@@ -62,23 +76,17 @@ self.addEventListener('fetch', (event) => {
         (cached) =>
           cached ||
           fetch(request).then((response) => {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+            if (response.ok) {
+              const clone = response.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+            }
             return response;
           })
       )
+      .catch(() => new Response('', { status: 404 }))
     );
     return;
   }
 
-  // All other requests — Network First with cache fallback
-  event.respondWith(
-    fetch(request)
-      .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-        return response;
-      })
-      .catch(() => caches.match(request))
-  );
+  // All other GET requests — just let the network handle it, don't intercept
 });

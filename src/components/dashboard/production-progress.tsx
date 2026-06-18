@@ -7,6 +7,7 @@ type ProductionItem = {
   icon: typeof Image;
   color: string;
   bg: string;
+  darkBg: string;
 };
 
 export function ProductionProgress({
@@ -19,11 +20,11 @@ export function ProductionProgress({
   stories: { done: number; goal: number };
 }) {
   const items: ProductionItem[] = [
-    { label: 'Posts', done: posts.done, goal: posts.goal, icon: Image, color: '#a3e635', bg: 'rgba(163,230,53,0.10)' },
-    { label: 'Reels', done: reels.done, goal: reels.goal, icon: Film, color: '#38bdf8', bg: 'rgba(56,189,248,0.10)' },
-    { label: 'Stories', done: stories.done, goal: stories.goal, icon: Radio, color: '#a78bfa', bg: 'rgba(167,139,250,0.10)' },
-    { label: 'Artes', done: 0, goal: 0, icon: Palette, color: '#fbbf24', bg: 'rgba(251,191,36,0.10)' },
-    { label: 'Vídeos', done: 0, goal: 0, icon: Video, color: '#fb7185', bg: 'rgba(251,113,133,0.10)' },
+    { label: 'Posts',   done: posts.done,   goal: posts.goal,   icon: Image,   color: '#d97706', bg: 'bg-amber-100',  darkBg: 'dark:bg-amber-500/10' },
+    { label: 'Reels',   done: reels.done,   goal: reels.goal,   icon: Film,    color: '#0ea5e9', bg: 'bg-sky-100',    darkBg: 'dark:bg-sky-500/10' },
+    { label: 'Stories', done: stories.done, goal: stories.goal, icon: Radio,   color: '#8b5cf6', bg: 'bg-violet-100', darkBg: 'dark:bg-violet-500/10' },
+    { label: 'Artes',   done: 0,            goal: 0,            icon: Palette, color: '#f59e0b', bg: 'bg-amber-100',  darkBg: 'dark:bg-amber-500/10' },
+    { label: 'Vídeos',  done: 0,            goal: 0,            icon: Video,   color: '#f43f5e', bg: 'bg-rose-100',   darkBg: 'dark:bg-rose-500/10' },
   ];
 
   return (
@@ -34,24 +35,21 @@ export function ProductionProgress({
         return (
           <div
             key={item.label}
-            className="rounded-2xl border border-white/[0.06] bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/[0.12]"
+            className="bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-200 dark:border-gray-700 p-4 transition-all duration-200 hover:-translate-y-0.5"
           >
             <div className="flex items-center justify-between mb-3">
-              <div
-                className="flex h-8 w-8 items-center justify-center rounded-lg"
-                style={{ backgroundColor: item.bg }}
-              >
+              <div className={['flex h-8 w-8 items-center justify-center rounded-lg', item.bg, item.darkBg].join(' ')}>
                 <Icon className="h-4 w-4" style={{ color: item.color }} />
               </div>
-              <span className="font-mono text-[11px] font-semibold text-muted-foreground tabular-nums">
+              <span className="font-mono text-[11px] font-semibold text-gray-400 dark:text-gray-500 tabular-nums">
                 {item.done}/{item.goal > 0 ? item.goal : '—'}
               </span>
             </div>
-            <p className="text-[13px] font-semibold text-foreground">{item.label}</p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{item.label}</p>
+            <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
               {item.goal > 0 ? `${pct}% concluído` : 'Sem meta definida'}
             </p>
-            <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{ width: `${pct}%`, backgroundColor: item.color }}

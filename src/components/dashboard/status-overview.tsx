@@ -25,10 +25,10 @@ function DonutRing({
   const dash = pct * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.06] bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/[0.12]">
+    <div className="flex flex-col items-center gap-3 bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-200 dark:border-gray-700 p-5 transition-all duration-200 hover:-translate-y-0.5">
       <div className="relative flex h-[88px] w-[88px] items-center justify-center">
         <svg className="-rotate-90" width="88" height="88" viewBox="0 0 88 88">
-          <circle cx="44" cy="44" r={r} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
+          <circle cx="44" cy="44" r={r} fill="none" stroke="#e5e7eb" strokeWidth="8" className="dark:[stroke:#374151]" />
           <circle
             cx="44"
             cy="44"
@@ -42,11 +42,11 @@ function DonutRing({
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-mono text-xl font-bold text-foreground tabular-nums">{count}</span>
-          <span className="text-[10px] text-muted-foreground">{Math.round(pct * 100)}%</span>
+          <span className="font-mono text-xl font-bold text-gray-800 dark:text-gray-100 tabular-nums">{count}</span>
+          <span className="text-[10px] text-gray-400 dark:text-gray-500">{Math.round(pct * 100)}%</span>
         </div>
       </div>
-      <p className="text-[12px] font-medium text-foreground text-center">{label}</p>
+      <p className="text-xs font-medium text-gray-600 dark:text-gray-300 text-center">{label}</p>
     </div>
   );
 }
@@ -55,10 +55,10 @@ export function StatusOverview({ counts }: { counts: StatusCounts }) {
   const total = counts.doing + counts.review + counts.todo + counts.backlog + counts.done;
 
   const sections = [
-    { label: 'Em Produção', value: counts.doing, color: '#a3e635' },
-    { label: 'Aguard. Aprovação', value: counts.review, color: '#fbbf24' },
-    { label: 'A Fazer', value: counts.todo + counts.backlog, color: '#38bdf8' },
-    { label: 'Finalizados', value: counts.done, color: '#84cc16' },
+    { label: 'Em Produção',       value: counts.doing,                  color: '#d97706' },
+    { label: 'Aguard. Aprovação', value: counts.review,                 color: '#f59e0b' },
+    { label: 'A Fazer',           value: counts.todo + counts.backlog,  color: '#0ea5e9' },
+    { label: 'Finalizados',       value: counts.done,                   color: '#8b5cf6' },
   ];
 
   return (
