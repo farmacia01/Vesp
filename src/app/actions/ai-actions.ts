@@ -1,8 +1,12 @@
 'use server';
 
 import { generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { createClient } from '@/lib/supabase/server';
+
+const customOpenai = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function generateImagePromptAction(clientId: string, scenario: string) {
   if (!process.env.OPENAI_API_KEY) {
@@ -26,7 +30,7 @@ export async function generateImagePromptAction(clientId: string, scenario: stri
 
   try {
     const { text } = await generateText({
-      model: openai('gpt-4o-mini') as any,
+      model: customOpenai('gpt-4o-mini') as any,
       system: `Você é um Diretor de Arte e Copywriter especialista no mercado digital brasileiro.
 O usuário fornecerá um CENÁRIO que ele deseja promover e o CONTEXTO DA MARCA do cliente.
 Sua missão é gerar uma proposta completa para um Flyer Promocional com estilo 3D moderno.
@@ -56,6 +60,6 @@ Crie a Copy para o Brasil e o roteiro visual da arte no estilo Flyer Promocional
     return { prompt: text };
   } catch (err: any) {
     console.error('AI Generation Error:', err);
-    return { error: 'Ocorreu um erro ao gerar o prompt. Verifique sua chave de API e tente novamente.' };
+    return { error: `Erro interno: ${err?.message || JSON.stringify(err)}` };
   }
 }
