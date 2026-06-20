@@ -69,11 +69,26 @@ export async function POST(req: Request) {
       .replace('{CLIENT_NOTES}', '');
   }
 
+  // Convert UI Messages to Core Messages to fix Zod schema validation errors
+  const coreMessages = messages.map((m: any) => {
+    let contentStr = '';
+    if (typeof m.content === 'string') contentStr = m.content;
+    else if (typeof m.text === 'string') contentStr = m.text;
+    else if (Array.isArray(m.parts)) {
+      contentStr = m.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('');
+    }
+    
+    return {
+      role: m.role,
+      content: contentStr,
+    };
+  });
+
   const result = await streamText({
     model: customOpenai('gpt-4o-mini'),
-    messages: messages,
+    messages: coreMessages,
     system: finalSystemPrompt,
   });
 
-  return result.toTextStreamResponse();
+  return result.toUIMessageStreamResponse();
 }

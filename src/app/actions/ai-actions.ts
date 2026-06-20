@@ -30,6 +30,7 @@ export async function generateImagePromptAction(clientId: string, scenario: stri
 
   try {
     const { text } = await generateText({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       model: customOpenai('gpt-4o-mini') as any,
       system: `Você é um Diretor de Arte e Copywriter especialista no mercado digital brasileiro.
 O usuário fornecerá um CENÁRIO que ele deseja promover e o CONTEXTO DA MARCA do cliente.
@@ -58,8 +59,8 @@ Crie a Copy para o Brasil e o roteiro visual da arte no estilo Flyer Promocional
     });
 
     return { prompt: text };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('AI Generation Error:', err);
-    return { error: `Erro interno: ${err?.message || JSON.stringify(err)}` };
+    return { error: `Erro interno: ${err instanceof Error ? err.message : String(err)}` };
   }
 }

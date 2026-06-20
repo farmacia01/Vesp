@@ -196,12 +196,12 @@ export default async function DashboardPage() {
 
       {/* ── ROW 1: 6 METRIC CARDS ── */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-        <MetricCard label="Receita Mensal"   value={fmtBRL(mrr)}              delta={`${activeClients ?? 0} contratos`} trend="up"      hint={`+${newClientsThisMonth ?? 0} este mês`} iconName="DollarSign"  tone="lime"   sparkData={sparkData.length > 1 ? sparkData : undefined} delay={0.04} />
-        <MetricCard label="Ticket Médio"     value={fmtBRL(avgTicket)}        delta={activeClients ? `${activeClients} clientes` : 'sem dados'} trend="up" hint="Por cliente ativo" iconName="TrendingUp"  tone="sky"    delay={0.08} />
-        <MetricCard label="Clientes Ativos"  value={String(activeClients ?? 0)} delta={newClientsThisMonth ? `+${newClientsThisMonth} este mês` : 'estável'} trend={newClientsThisMonth ? 'up' : 'neutral'} iconName="Users" tone="violet" delay={0.12} />
-        <MetricCard label="Produção do Mês"  value={String(planDone)}         delta={`de ${planTotal} planejados`} trend={planDone >= planTotal * 0.7 ? 'up' : 'neutral'} hint={`${planTotal > 0 ? Math.round((planDone / planTotal) * 100) : 0}% concluído`} iconName="Layers" tone="amber" delay={0.16} />
-        <MetricCard label="Tarefas Pendentes" value={String(openTasks ?? 0)}  delta={`${doneTasks ?? 0} concluídas`} trend={(doneTasks ?? 0) >= (openTasks ?? 0) ? 'up' : 'down'} iconName="Clock" tone="rose"   delay={0.20} />
-        <MetricCard label="Aprovações"       value={String(reviewTasksCount ?? 0)} delta={(reviewTasksCount ?? 0) === 0 ? 'tudo ok' : 'aguardando'} trend={(reviewTasksCount ?? 0) === 0 ? 'up' : 'down'} hint="Aguardando cliente" iconName="CheckSquare" tone="teal" delay={0.24} />
+        <MetricCard label="Receita Mensal"   value={fmtBRL(mrr)}              hint={`+${newClientsThisMonth ?? 0} este mês`} iconName="DollarSign"  tone="lime"   sparkData={sparkData.length > 1 ? sparkData : undefined} delay={0.04} />
+        <MetricCard label="Ticket Médio"     value={fmtBRL(avgTicket)}        hint="Por cliente ativo" iconName="TrendingUp"  tone="sky"    delay={0.08} />
+        <MetricCard label="Clientes Ativos"  value={String(activeClients ?? 0)} iconName="Users" tone="violet" delay={0.12} />
+        <MetricCard label="Produção do Mês"  value={String(planDone)}         hint={`${planTotal > 0 ? Math.round((planDone / planTotal) * 100) : 0}% concluído`} iconName="Layers" tone="amber" delay={0.16} />
+        <MetricCard label="Tarefas Pendentes" value={String(openTasks ?? 0)}  iconName="Clock" tone="rose"   delay={0.20} />
+        <MetricCard label="Aprovações"       value={String(reviewTasksCount ?? 0)} hint="Aguardando cliente" iconName="CheckSquare" tone="teal" delay={0.24} />
       </div>
 
       {/* ── ROW 2: CHART + AGENDA ── */}

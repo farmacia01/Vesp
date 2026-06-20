@@ -23,22 +23,10 @@ const tabs: NavItem[] = [
 
 export function BottomTabBar() {
   const pathname = usePathname()
-  const [activeTab, setActiveTab] = useState(tabs[0].name)
-  const [isMobile, setIsMobile] = useState(false)
 
-  useEffect(() => {
-    // Sync active tab with current URL
-    const currentTab = tabs.find(t => pathname.startsWith(t.url))
-    if (currentTab) setActiveTab(currentTab.name)
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [pathname])
+  // Derive active tab from current URL
+  const currentTab = tabs.find((t) => pathname.startsWith(t.url))
+  const activeTabName = currentTab ? currentTab.name : tabs[0].name
 
   return (
     <div
@@ -49,13 +37,12 @@ export function BottomTabBar() {
       <div className="flex items-center gap-2 sm:gap-3 bg-background/60 border border-border backdrop-blur-xl py-1.5 px-1.5 rounded-full shadow-lg">
         {tabs.map((item) => {
           const Icon = item.icon
-          const isActive = activeTab === item.name
+          const isActive = activeTabName === item.name
 
           return (
             <Link
               key={item.name}
               href={item.url}
-              onClick={() => setActiveTab(item.name)}
               className={cn(
                 "relative cursor-pointer text-sm font-semibold px-4 py-3 sm:px-6 sm:py-2 rounded-full transition-colors",
                 "text-foreground/80 hover:text-primary",

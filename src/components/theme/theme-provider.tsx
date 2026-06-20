@@ -41,6 +41,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? 'light';
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeState(stored);
     applyTheme(stored);
   }, []);

@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import {
   Area,
   AreaChart,
@@ -38,9 +40,19 @@ function TooltipContent({
 }
 
 export function RevenueAreaRealChart({ data }: { data: MonthlyRevenue[] }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className="h-[220px] w-full animate-pulse bg-muted/20" />;
+  }
+
   if (!data.length) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-gray-400">
+      <div className="flex h-[220px] w-full items-center justify-center text-sm text-gray-400">
         Sem dados de receita ainda.
       </div>
     );
