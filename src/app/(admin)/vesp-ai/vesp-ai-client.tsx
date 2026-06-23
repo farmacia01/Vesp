@@ -78,7 +78,7 @@ export function VespAiClient({ clients }: { clients: any[] }) {
   };
 
   return (
-    <Card className="flex flex-col h-[calc(100dvh-280px)] sm:h-[calc(100vh-200px)] min-h-[400px]">
+    <Card className="flex flex-col h-[calc(100dvh-260px)] sm:h-[calc(100dvh-200px)] min-h-[400px]">
       {/* Header & Settings */}
       <div className="p-4 border-b bg-muted/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
